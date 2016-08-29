@@ -1,4 +1,4 @@
-# **Ansible Role: Users**
+# **Ansible Role: AWSLogs**
 
 [![Build Status](https://travis-ci.org/thiagomgo/ansible-role-awslogs.svg?branch=master)](https://travis-ci.org/thiagomgo/ansible-role-awslogs) [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-awslogs-blue.svg)](https://galaxy.ansible.com/thiagomgo/awslogs/)
 
@@ -6,7 +6,7 @@ This role install and configure the AWS CloudWatch Logs.
 
 ## Requirements
 
-This role only requires Ansible version 1.9+.
+This role only requires Ansible version 1.9+ and EC2_FACTS module.
 
 ## Role Variables
 
