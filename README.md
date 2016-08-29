@@ -6,7 +6,7 @@ This role install and configure the AWS CloudWatch Logs.
 
 ## Requirements
 
-This role only requires Ansible version 1.9+.
+This role only requires Ansible version 1.9+ and EC2_FACTS module.
 
 ## Role Variables
 
