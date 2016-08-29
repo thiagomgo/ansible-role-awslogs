@@ -3,17 +3,21 @@
 - include: conf.yml
   tags:
     - configure
+    - awslogs
 
 - include: install.yml
   tags:
     - install
+    - awslogs
 
 - include: start.yml
   tags:
     - start
     - restart
     - service
+    - awslogs
 
 - include: cleanup.yml
   tags:
     - cleanup
+    - awslogs

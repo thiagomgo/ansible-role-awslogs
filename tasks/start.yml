@@ -1,6 +1,6 @@
 ---
 
-- name: "awslogs | restart awslogs service"
+- name: "awslogs | restart the service"
   service:
     enabled: yes
     name: awslogs

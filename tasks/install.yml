@@ -10,7 +10,7 @@
   stat: path=/etc/init.d/awslogs
   register: service_status
 
-- name: "awslogs | download the awslogs installation script"
+- name: "awslogs | download the installation script"
   get_url:
     dest: /tmp/awslogs-agent-setup.py
     group: root
@@ -22,7 +22,7 @@
 - name: "awslogs | discover EC2 facts"
   action: ec2_facts
 
-- name: "awslogs | install the awslogs daemon"
+- name: "awslogs | install the daemon"
   shell: "python /tmp/awslogs-agent-setup.py -n -r {{ ansible_ec2_placement_region }} -c /var/awslogs/etc/awslogs.conf"
   args:
     creates: /etc/init.d/awslogs
