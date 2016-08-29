@@ -25,4 +25,4 @@
 - name: "awslogs | install the daemon"
   shell: "python /tmp/awslogs-agent-setup.py -n -r {{ ansible_ec2_placement_region }} -c /var/awslogs/etc/awslogs.conf"
   args:
-    creates: /etc/init.d/awslogs
+    creates: "/etc/init.d/awslogs"
