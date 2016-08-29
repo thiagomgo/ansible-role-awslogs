@@ -1,0 +1,18 @@
+---
+
+- name: "awslogs | create directories"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 755
+  with_items:
+    - /var/awslogs/state
+    - /var/awslogs/etc
+
+- name: "awslogs | configure awslogs agent"
+  template:
+    src: awslogs.conf.j2
+    dest: /var/awslogs/etc/awslogs.conf
+    owner: root
+    group: root
+    mode: 0644

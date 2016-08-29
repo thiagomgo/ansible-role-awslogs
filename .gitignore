@@ -1,0 +1,47 @@
+### Ansible
+vaults
+ansible.cfg
+hosts
+keys
+*.retry
+
+### OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+### Emacs backup files
+*~
+.\#*
+
+### IDE files
+/.settings
+/.buildpath
+/.project
+/nbproject
+*.komodoproject
+*.kpf
+/.idea
+
+### Vagrant files
+.sudoers/
+.vagrant/
+vagrant_ansible_inventory_*
+ansible.cfg
+
+### Vim swap files
+*.swp
+*.swo
+
+### Sublime stuff
+*.sublime-project
+*.sublime-workspace
+
+### Other files
+!empty

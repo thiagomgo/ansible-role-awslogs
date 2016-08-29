@@ -1,0 +1,7 @@
+---
+
+- name: "awslogs | restart awslogs service"
+  service:
+    enabled: yes
+    name: awslogs
+    state: restarted

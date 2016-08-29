@@ -1,0 +1,28 @@
+---
+
+- name: "awslogs | update apt cache"
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+  when: ansible_os_family == 'Debian'
+
+- name: "awslogs | check if the service exists"
+  stat: path=/etc/init.d/awslogs
+  register: service_status
+
+- name: "awslogs | download the awslogs installation script"
+  get_url:
+    dest: /tmp/awslogs-agent-setup.py
+    group: root
+    owner: root
+    mode: 0600
+    url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
+  when: service_status.stat.exists == false
+
+- name: "awslogs | discover EC2 facts"
+  action: ec2_facts
+
+- name: "awslogs | install the awslogs daemon"
+  shell: "python /tmp/awslogs-agent-setup.py -n -r {{ ansible_ec2_placement_region }} -c /var/awslogs/etc/awslogs.conf"
+  args:
+    creates: /etc/init.d/awslogs

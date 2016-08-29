@@ -1,0 +1,19 @@
+---
+
+- include: conf.yml
+  tags:
+    - configure
+
+- include: install.yml
+  tags:
+    - install
+
+- include: start.yml
+  tags:
+    - start
+    - restart
+    - service
+
+- include: cleanup.yml
+  tags:
+    - cleanup

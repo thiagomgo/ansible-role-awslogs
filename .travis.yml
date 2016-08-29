@@ -1,0 +1,62 @@
+---
+dist: trusty
+sudo: required
+
+language: python
+python: "2.7"
+
+branches:
+  only:
+    - master
+
+# Install ansible
+addons:
+  apt:
+    packages:
+    - python-pip
+
+env:
+  - ANSIBLE_VERSION=latest
+  - ANSIBLE_VERSION=2.1.0.0
+  - ANSIBLE_VERSION=2.0.2.0
+  - ANSIBLE_VERSION=2.0.1.0
+  - ANSIBLE_VERSION=2.0.0.2
+  - ANSIBLE_VERSION=2.0.0.1
+  - ANSIBLE_VERSION=2.0.0.0
+  - ANSIBLE_VERSION=1.9.6
+  - ANSIBLE_VERSION=1.9.5
+  - ANSIBLE_VERSION=1.9.4
+  - ANSIBLE_VERSION=1.9.3
+  - ANSIBLE_VERSION=1.9.2
+  - ANSIBLE_VERSION=1.9.1
+  - ANSIBLE_VERSION=1.9.0.1
+
+install:
+  # Install ansible
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install --no-binary ansible ansible; else pip install --no-binary ansible ansible==$ANSIBLE_VERSION; fi
+  - pip install ansible
+
+  # Check ansible version
+  - ansible --version
+
+  # Create ansible.cfg with correct roles_path
+  - echo -e 'localhost  ansible_connection=local' > tests/inventory
+  - echo -e '[defaults]\nroles_path = ../\nhostfile = ./tests/inventory' > ansible.cfg
+
+script:
+  # Basic role syntax check
+  - ansible-playbook --sudo tests/test.yml -i tests/inventory --syntax-check
+
+  # Run the role/playbook with ansible-playbook.
+  - ansible-playbook --sudo tests/test.yml -vvvv
+
+  # Run the role/playbook again, checking to make sure it's idempotent
+  - >
+      ansible-playbook --sudo tests/test.yml
+      | grep -q 'changed=0.*failed=0'
+      && (echo 'Idempotence test: pass' && exit 0)
+      || (echo 'Idempotence test: fail' && exit 1)
+
+notifications:
+  email: false
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
