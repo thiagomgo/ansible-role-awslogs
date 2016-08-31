@@ -8,9 +8,11 @@ galaxy_info:
     - name: EL
       versions:
       - all
-    - name: Debian
+    - name: Ubuntu
       versions:
       - all
   galaxy_tags:
     - system
+    - cloud
+    - cloud:ec2
 dependencies: []
