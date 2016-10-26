@@ -24,6 +24,14 @@ Here is a list of all the default variables for this role, which are also availa
 #
 ```
 
+In addition, there are three variables that are not used by default:
+
+```yaml
+awslogs_region: eu-west-1            # Overrides the local region for log shipping
+awslogs_access_key_id: XXX           # AWS key ID, used instead of IAM roles
+awslogs_secret_access_key: XXX       # AWS secret key, used instead of IAM roles
+```
+
 ## Dependencies
 
 None
