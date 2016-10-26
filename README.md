@@ -10,19 +10,19 @@ This role only requires Ansible version 1.9+ and EC2_FACTS module.
 
 ## Role Variables
 
-Here is a list of all the default variables for this role, which are also available in `defaults/main.yml`.
+This role only uses one variable, `awslogs_logs`, which is a dictionary comprised of the following items:
 
 ```yaml
----
 
-# logs:
-#    - file: /var/log/syslog            (required)
-#      format: "%b %d %H:%M:%S"
-#      time_zone: "LOCAL"
-#      initial_position: "end_of_file"
-#      group_name: syslog               (required)
-#
+awslogs_logs:
+  - file: /var/log/syslog            # The path to the log file you want to ship (required)
+    format: "%b %d %H:%M:%S"         # The date and time format of the log file
+    time_zone: "LOCAL"               # Timezone, can either be LOCAL or UTC
+    initial_position: "end_of_file"  # Where log shipping should start from
+    group_name: syslog               # The Cloudwatch Logs group name (required)
 ```
+
+This configuration is further expanded on in the [Amazon Cloudwatch Logs Documentation](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html#d0e2872).
 
 ## Dependencies
 
@@ -36,8 +36,7 @@ None
 - hosts: all
 
   vars:
-
-    logs:
+    awslogs_logs:
       - file: /var/log/syslog
         format: "%b %d %H:%M:%S"
         time_zone: "LOCAL"
@@ -62,5 +61,3 @@ MIT / BSD
 
 Thiago Gomes
 - thiago.mgomes [at] gmail.com
-
-
