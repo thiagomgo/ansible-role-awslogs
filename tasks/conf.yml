@@ -16,3 +16,9 @@
     owner: root
     group: root
     mode: 0644
+
+- name: "awslogs | configure awslogs credentials"
+  template:
+    src: awscli.conf.j2
+    dest: /var/awslogs/etc/awscli.conf
+  when: awslogs_secret_access_key is defined

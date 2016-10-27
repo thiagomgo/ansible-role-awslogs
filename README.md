@@ -22,6 +22,14 @@ awslogs_logs:
     group_name: syslog               # The Cloudwatch Logs group name (required)
 ```
 
+In addition, there are three variables that are not used by default:
+
+```yaml
+awslogs_region: eu-west-1            # Overrides the local region for log shipping
+awslogs_access_key_id: XXX           # AWS key ID, used instead of IAM roles
+awslogs_secret_access_key: XXX       # AWS secret key, used instead of IAM roles
+```
+
 This configuration is further expanded on in the [Amazon Cloudwatch Logs Documentation](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html#d0e2872).
 
 ## Dependencies
