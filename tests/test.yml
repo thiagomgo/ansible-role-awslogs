@@ -7,7 +7,7 @@
 
   vars:
 
-    logs:
+    awslogs_logs:
       - file: /var/log/syslog
         format: "%b %d %H:%M:%S"
         time_zone: "LOCAL"
