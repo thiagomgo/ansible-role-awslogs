@@ -19,6 +19,15 @@
     url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
   when: service_status.stat.exists == false
 
+- name: "awslogs | upload temporary awslogs.conf"
+  template:
+    src: awslogs.conf.j2
+    dest: /tmp/awslogs.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: service_status.stat.exists == false
+
 - name: "awslogs | discover EC2 facts"
   action: ec2_facts
 
