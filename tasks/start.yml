@@ -1,7 +1,7 @@
 ---
 
-- name: "awslogs | restart the service"
+- name: "awslogs | Start the service"
   service:
     enabled: yes
     name: awslogs
-    state: restarted
+    state: started
