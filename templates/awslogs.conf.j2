@@ -130,6 +130,6 @@ initial_position = {{ log.initial_position }}
 file = {{ log.file }}
 buffer_duration = 5000
 log_group_name = {{ log.group_name }}
-log_stream_name = {instance_id}
+log_stream_name = {{ log.stream_name }}
 
 {% endfor %}

@@ -20,6 +20,7 @@ awslogs_logs:
     time_zone: "LOCAL"               # Timezone, can either be LOCAL or UTC
     initial_position: "end_of_file"  # Where log shipping should start from
     group_name: syslog               # The Cloudwatch Logs group name (required)
+    stream_name: "{instance_id}"     # You can use a literal string and/or predefined variables ({instance_id}, {hostname}, {ip_address})
 ```
 
 In addition, there are three variables that are not used by default:
