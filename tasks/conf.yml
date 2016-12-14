@@ -4,7 +4,7 @@
   file:
     path: "{{ item }}"
     state: directory
-    mode: 755
+    mode: 0755
   with_items:
     - /var/awslogs/state
     - /var/awslogs/etc
