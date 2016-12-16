@@ -18,6 +18,16 @@
     mode: 0600
     url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
   when: service_status.stat.exists == false
+  
+- name: "awslogs | create systemd unit file"
+  copy:
+    src=awslogs.service
+    dest=/lib/systemd/system/awslogs.service
+    owner=root
+    group=root
+    mode=644
+    backup=yes
+  when: service_status.stat.exists == false and ansible_service_mgr is defined and ansible_service_mgr == "systemd"
 
 - name: "awslogs | upload temporary awslogs.conf"
   template:
