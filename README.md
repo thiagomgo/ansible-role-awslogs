@@ -44,7 +44,7 @@ None
 - hosts: all
 
   vars:
-    awslogs_region us-east-1
+    awslogs_region: us-east-1
     awslogs_logs:
       - file: /var/log/syslog
         format: "%b %d %H:%M:%S"
