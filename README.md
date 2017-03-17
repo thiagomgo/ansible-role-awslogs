@@ -10,7 +10,7 @@ This role only requires Ansible version 1.9+ and EC2_FACTS module.
 
 ## Role Variables
 
-This role only uses one variable, `awslogs_logs`, which is a dictionary comprised of the following items:
+This role only uses two variables, `awslogs_region` and `awslogs_logs`, which is a dictionary comprised of the following items:
 
 ```yaml
 
@@ -23,10 +23,9 @@ awslogs_logs:
     stream_name: "{instance_id}"     # You can use a literal string and/or predefined variables ({instance_id}, {hostname}, {ip_address})
 ```
 
-In addition, there are three variables that are not used by default:
+In addition, there are two variables that are not used by default:
 
 ```yaml
-awslogs_region: eu-west-1            # Overrides the local region for log shipping
 awslogs_access_key_id: XXX           # AWS key ID, used instead of IAM roles
 awslogs_secret_access_key: XXX       # AWS secret key, used instead of IAM roles
 ```
@@ -45,6 +44,7 @@ None
 - hosts: all
 
   vars:
+    awslogs_region us-east-1
     awslogs_logs:
       - file: /var/log/syslog
         format: "%b %d %H:%M:%S"
@@ -67,6 +67,9 @@ None
 MIT / BSD
 
 ## Author Information
+
+U.S. National Library of Medicine (NLM)
+Based on work by:
 
 Thiago Gomes
 - thiago.mgomes [at] gmail.com
