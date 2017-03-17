@@ -6,3 +6,4 @@ awslogs_logs:
     initial_position: "end_of_file"
     group_name: "syslog"
     stream_name: "{instance_id}"
+awslogs_region: us-east-1
