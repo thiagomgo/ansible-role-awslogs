@@ -1,6 +1,7 @@
 [plugins]
 cwlogs = cwlogs
+
 [default]
 region = {{ awslogs_region | default(ansible_ec2_placement_region) }}
-aws_access_key_id = {{ awslogs_access_key_id }}
-aws_secret_access_key = {{ awslogs_secret_access_key }}
+aws_access_key_id = {{ awslogs_access_key_id|default('99999999') }}
+aws_secret_access_key = {{ awslogs_secret_access_key|default('9999999999999999') }}

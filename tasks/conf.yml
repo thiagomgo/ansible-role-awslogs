@@ -22,5 +22,3 @@
   template:
     src: aws.conf.j2
     dest: /var/awslogs/etc/aws.conf
-  when: awslogs_secret_access_key is defined
-  notify: restart awslogs

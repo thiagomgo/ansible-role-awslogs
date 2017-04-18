@@ -42,5 +42,4 @@
   shell: "python /tmp/awslogs-agent-setup.py -n -r {{ awslogs_region }} -c /tmp/awslogs.conf"
   args:
     creates: "/etc/init.d/awslogs"
-  notify: "Enable awslogs"
-
+  notify: restart awslogs
