@@ -10,13 +10,6 @@
     - install
     - awslogs
 
-- include: start.yml
-  tags:
-    - start
-    - restart
-    - service
-    - awslogs
-
 - include: cleanup.yml
   tags:
     - cleanup

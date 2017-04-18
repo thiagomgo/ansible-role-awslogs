@@ -1,4 +1,4 @@
-- name: restart awslogs
+- name: Enable awslogs
   service:
     name: awslogs
     state: restarted
