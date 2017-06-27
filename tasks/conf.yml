@@ -8,6 +8,7 @@
   with_items:
     - /var/awslogs/state
     - /var/awslogs/etc
+    - /var/awslogs/nlm
 
 - name: "awslogs | configure awslogs agent"
   template:

@@ -19,6 +19,16 @@
     url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
   when: service_status.stat.exists == false
 
+- name: "awslogs | create nlm specific systemd unit file"
+  copy:
+    src=awslogs-init.service
+    dest=/lib/systemd/system/awslogs-init.service
+    owner=root
+    group=root
+    mode=644
+    backup=yes
+  when: ansible_service_mgr is defined and ansible_service_mgr == "systemd"
+
 - name: "awslogs | create systemd unit file"
   copy:
     src=awslogs.service
@@ -43,3 +53,13 @@
   args:
     creates: "/etc/init.d/awslogs"
   notify: restart awslogs
+
+- name: "awslogs | install nlm-specific script"
+  copy:
+    src=awslogs-reconfig
+    dest=/var/awslogs/nlm/awslogs-reconfig
+    owner=root
+    group=root
+    mode=0755
+    backup=yes
+  when: ansible_service_mgr is defined and ansible_service_mgr == "systemd"

@@ -1,0 +1,12 @@
+[Unit]
+Description=The CloudWatch Logs agent
+After=rc-local.service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/var/awslogs/nlm/awslogs-reconfig
+
+[Install]
+WantedBy=multi-user.target

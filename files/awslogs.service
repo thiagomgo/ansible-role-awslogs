@@ -1,6 +1,7 @@
 [Unit]
 Description=The CloudWatch Logs agent
 After=rc-local.service
+After=awslogs-init.service
 
 [Service]
 Type=simple
