@@ -94,4 +94,4 @@ def test_nlmaccount_dflt_property(metadata):
     urlforip = reconfig.METADATA.format('local-ipv4')
     with requests_mock.mock() as m:
         m.get(urlforip, text='10.100.3.23')
-        assert metadata.nlmaccount is None
+        assert metadata.nlmaccount == 'NLM-INT'

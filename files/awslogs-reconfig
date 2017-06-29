@@ -74,7 +74,6 @@ class BaseMetadata(object):
         self.__instance_id = None
         self.__iaminfo = None
         self.__private_address = None
-        self.__tags = False
 
     @property
     def region(self):
@@ -126,6 +125,10 @@ class EnhancedMetadata(BaseMetadata):
     Adds meta-data derived from boto 2.x requests for the instance, and NLM derived meta-data that is not standard
     """
 
+    def __init__(self):
+        super(EnhancedMetadata, self).__init__()
+        self.__tags = False
+
     @property
     def tags(self):
         """
@@ -140,7 +143,7 @@ class EnhancedMetadata(BaseMetadata):
         return self.__tags
 
     @staticmethod
-    def _nlmaccount(ipstr, dfltaccount=None):
+    def _nlmaccount(ipstr, dflt=None):
         """
         Determines an NLM account name using an IP address
 
@@ -153,7 +156,7 @@ class EnhancedMetadata(BaseMetadata):
             cidrnet = netaddr.IPNetwork(cidrmask)
             if ip in cidrnet:
                 return accountname
-        return dfltaccount
+        return dflt
 
     @property
     def nlmaccount(self):
@@ -162,7 +165,7 @@ class EnhancedMetadata(BaseMetadata):
 
         :return: a string representing the semantic name of the NLM-OCCS account
         """
-        return EnhancedMetadata._nlmaccount(self.private_address)
+        return EnhancedMetadata._nlmaccount(self.private_address, dflt='NLM-INT')
 
 
 def write_aws_conf(path='/var/awslogs/etc/aws.conf', region='us-east-1'):
@@ -195,7 +198,7 @@ def main():
     meta = EnhancedMetadata()
     write_aws_conf(region=meta.region)
     print('log_stream_name = %s' % get_logstream_name(meta))
-    print('Account = %s' % meta.nlmaccount())
+    print('Account = %s' % meta.nlmaccount)
 
 
 if __name__ == '__main__':
