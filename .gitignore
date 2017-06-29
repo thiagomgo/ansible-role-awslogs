@@ -5,6 +5,10 @@ hosts
 keys
 *.retry
 
+### Python
+*.pyo
+*.pyc
+
 ### OS generated files
 .DS_Store
 .DS_Store?
