@@ -1,0 +1,11 @@
+# These requirements are only for testing
+
+## Base - ansible must install these
+requests
+jinja2
+boto
+netaddr
+
+## Testing
+pytest
+requests_mock

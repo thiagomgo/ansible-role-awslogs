@@ -8,6 +8,8 @@ keys
 ### Python
 *.pyo
 *.pyc
+/.cache/
+/junit.xml
 
 ### OS generated files
 .DS_Store
