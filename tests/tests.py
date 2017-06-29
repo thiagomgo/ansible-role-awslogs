@@ -65,3 +65,33 @@ def test_iam_info_property(metadata):
         actual_iaminfo = metadata.iam_info
         assert isinstance(actual_iaminfo, dict)
         assert actual_iaminfo['notreal']['notrealiam'] == 'role'
+
+
+def test_nlmaccount_int_property(metadata):
+    """
+    Test that the NLM Account property is working for an NLM-INT subnet
+    """
+    urlforip = reconfig.METADATA.format('local-ipv4')
+    with requests_mock.mock() as m:
+        m.get(urlforip, text='10.154.240.17')
+        assert metadata.nlmaccount == 'NLM-INT'
+
+
+def test_nlmaccount_qa_property(metadata):
+    """
+    Test that the NLM Account property is working for an NLM-QA subnet
+    """
+    urlforip = reconfig.METADATA.format('local-ipv4')
+    with requests_mock.mock() as m:
+        m.get(urlforip, text='10.154.233.2')
+        assert metadata.nlmaccount == 'NLM-QA'
+
+
+def test_nlmaccount_dflt_property(metadata):
+    """
+    Test the response when the local IP is outside the private range
+    """
+    urlforip = reconfig.METADATA.format('local-ipv4')
+    with requests_mock.mock() as m:
+        m.get(urlforip, text='10.100.3.23')
+        assert metadata.nlmaccount is None
