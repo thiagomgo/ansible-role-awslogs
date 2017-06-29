@@ -140,7 +140,7 @@ class EnhancedMetadata(BaseMetadata):
         return self.__tags
 
     @staticmethod
-    def _nlmaccount(ipstr, dfltaccount):
+    def _nlmaccount(ipstr, dfltaccount=None):
         """
         Determines an NLM account name using an IP address
 
@@ -162,7 +162,7 @@ class EnhancedMetadata(BaseMetadata):
 
         :return: a string representing the semantic name of the NLM-OCCS account
         """
-        return EnhancedMetadata._nlmaccount(self.private_address, 'NLM-INT')
+        return EnhancedMetadata._nlmaccount(self.private_address)
 
 
 def write_aws_conf(path='/var/awslogs/etc/aws.conf', region='us-east-1'):
