@@ -1,11 +1,6 @@
-# These requirements are only for testing
+## Base requirements must be installed on remote
+-r files/requirements.txt
 
-## Base - ansible must install these
-requests
-jinja2
-boto
-netaddr
-
-## Testing
+## These are only for testing
 pytest
 requests_mock

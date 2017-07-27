@@ -194,7 +194,7 @@ def get_logstream_name(meta):
     return '{}-{}-{}'.format(name, meta.private_address, meta.instance_id)
 
 
-def main():
+def main(args):
     meta = EnhancedMetadata()
     write_aws_conf(region=meta.region)
     print('log_stream_name = %s' % get_logstream_name(meta))
@@ -202,4 +202,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
