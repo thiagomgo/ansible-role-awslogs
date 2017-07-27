@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #
 # Description:
 #    This script is responsible to reconfigure AWSlogs agent on a running EC2 instance as it is booting.
