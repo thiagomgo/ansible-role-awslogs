@@ -1,0 +1,13 @@
+[Unit]
+Description=NLMiInitialization for AWS Logs service
+After=rc-local.service
+After=network-online.target
+Wants=network-online.target
+Before=awslogs.service
+
+[Service]
+Type=oneshot
+ExecStart=/var/awslogs/nlm/awslogs-reconfig
+
+[Install]
+WantedBy=multi-user.target
