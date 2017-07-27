@@ -20,9 +20,10 @@
 from __future__ import print_function, unicode_literals
 import sys
 import re
+import os
 
 import requests
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
 from boto import ec2
 import netaddr
 
@@ -48,20 +49,9 @@ VPC_CIDR_TO_ACCOUNT = {
 
 
 # Template for generating /var/awslogs/etc/aws.conf
-AWS_CONF_TEMPLATE = Template(
-    """[plugins]
-    cwlogs = cwlogs
+TEMPLATES_PATH = '/var/awslogs/nlm/templates'
 
-    [default]
-    region = {{ region }}
-    """
-)
-
-
-# Template for generating /var/awslogs/etc/awslogs.conf, which contains rules for OS specific logs.
-AWSLOGS_CONF_TEMPLATE = Template(
-    """Nothing here yet"""
-)
+CONF_PATH = '/var/awslogs/etc'
 
 
 class BaseMetadata(object):
@@ -124,7 +114,6 @@ class EnhancedMetadata(BaseMetadata):
     """
     Adds meta-data derived from boto 2.x requests for the instance, and NLM derived meta-data that is not standard
     """
-
     def __init__(self):
         super(EnhancedMetadata, self).__init__()
         self.__tags = False
@@ -168,12 +157,24 @@ class EnhancedMetadata(BaseMetadata):
         return EnhancedMetadata._nlmaccount(self.private_address, dflt='NLM-INT')
 
 
-def write_aws_conf(path='/var/awslogs/etc/aws.conf', region='us-east-1'):
-    """
-    Write region to aws.conf, making sure to use logs template
-    """
-    with open(path, 'w') as f:
-        f.write(AWS_CONF_TEMPLATE.render(region=region))
+class ConfigWriter(object):
+
+    def __init__(self, templates_path=TEMPLATES_PATH, conf_path=CONF_PATH):
+        self.templates_path = templates_path
+        self.conf_path = conf_path
+        self.__env = None
+
+    @property
+    def env(self):
+        if self.__env is None:
+            self.__env = Environment(loader=FileSystemLoader(self.templates_path))
+        return self.__env
+
+    def write_aws_conf(self, region):
+        template = self.env.get_template('aws.conf.j2')
+        path = os.path.join(self.conf_path, 'aws.conf')
+        with open(path, 'w') as f:
+            f.write(template.render(region=region))
 
 
 def get_logstream_name(meta):
@@ -196,7 +197,9 @@ def get_logstream_name(meta):
 
 def main(args):
     meta = EnhancedMetadata()
-    write_aws_conf(region=meta.region)
+    config_writer = ConfigWriter()
+    config_writer.write_aws_conf(meta.region)
+
     print('log_stream_name = %s' % get_logstream_name(meta))
     print('Account = %s' % meta.nlmaccount)
 
