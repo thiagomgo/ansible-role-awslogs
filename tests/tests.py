@@ -76,6 +76,35 @@ def test_iam_info_property(metadata):
         assert actual_iaminfo['notreal']['notrealiam'] == 'role'
 
 
+def test_region_mock(metadata):
+    metadata.mock()
+    assert metadata.region == 'us-east-1'
+
+
+def test_instance_id_mock(metadata):
+    metadata.mock()
+    assert metadata.instance_id == 'i-am-groot'
+
+
+def test_private_address_mock(metadata):
+    metadata.mock()
+    assert metadata.private_address == '10.100.99.99'
+
+
+def test_iam_info_mock(metadata):
+    metadata.mock()
+    actual_iaminfo = metadata.iam_info
+    assert isinstance(actual_iaminfo, dict)
+    assert actual_iaminfo['realm'] == 'groot'
+
+
+def test_tags_mock(metadata):
+    metadata.mock()
+    tags = metadata.tags
+    assert isinstance(tags, dict)
+    assert tags['Name'] == 'groot'
+
+
 def test_nlmaccount_int_property(metadata):
     """
     Test that the NLM Account property is working for an NLM-INT subnet

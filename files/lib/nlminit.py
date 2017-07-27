@@ -21,6 +21,7 @@ from __future__ import print_function, unicode_literals
 import sys
 import re
 import os
+from argparse import ArgumentParser
 
 import requests
 from jinja2 import Environment, FileSystemLoader
@@ -64,6 +65,12 @@ class BaseMetadata(object):
         self.__instance_id = None
         self.__iaminfo = None
         self.__private_address = None
+
+    def mock(self):
+        self.__region = 'us-east-1'
+        self.__instance_id = 'i-am-groot'
+        self.__iaminfo = {'realm': 'groot'}
+        self.__private_address = '10.100.99.99'
 
     @property
     def region(self):
@@ -118,6 +125,10 @@ class EnhancedMetadata(BaseMetadata):
         super(EnhancedMetadata, self).__init__()
         self.__tags = False
 
+    def mock(self):
+        super(EnhancedMetadata, self).mock()
+        self.__tags = {'Name': 'groot'}
+
     @property
     def tags(self):
         """
@@ -130,6 +141,24 @@ class EnhancedMetadata(BaseMetadata):
             assert len(rsvs[0].instances) == 1
             self.__tags = rsvs[0].instances[0].tags
         return self.__tags
+
+    @property
+    def nametag(self):
+        """
+        Gets the 'Name' tag value, or returns a default
+        """
+        name = 'unknown'
+        try:
+            if u'Name' in self.tags:
+                _name = self.tags[u'Name']
+                _name = _name.encode('ascii', 'ignore')
+                _name = re.sub(r'[^a-zA-Z0-9]+', r'-', _name).strip('-')
+                _name = re.sub(r'--+', r'-', _name)
+                name = _name
+        except Exception as e:
+            sys.stderr.write('Exception: %s\n' % e)
+            pass
+        return name
 
     @staticmethod
     def _nlmaccount(ipstr, dflt=None):
@@ -176,32 +205,37 @@ class ConfigWriter(object):
         with open(path, 'w') as f:
             f.write(template.render(region=region))
 
+    def write_awslogs_conf(self, nlmaccount, nametag):
+        template = self.env.get_template('awslogs.conf.j2')
+        path = os.path.join(self.conf_path, 'awslogs.conf')
+        with open(path, 'w') as f:
+            f.write(template.render(nlmaccount=nlmaccount, nametag=nametag))
 
-def get_logstream_name(meta):
-    """
-    Determine a logstream name used for most logs
-    """
-    name = 'unknown'
-    try:
-        if u'Name' in meta.tags:
-            _name = meta.tags[u'Name']
-            _name = _name.encode('ascii', 'ignore')
-            _name = re.sub(r'[^a-zA-Z0-9]+', r'-', _name).strip('-')
-            _name = re.sub(r'--+', r'-', _name)
-            name = _name
-    except Exception as e:
-        sys.stderr.write('Exception: %s\n' % e)
-        pass
-    return '{}-{}-{}'.format(name, meta.private_address, meta.instance_id)
+
+def parse_args(args):
+    parser = ArgumentParser(description='awslogs agent pre-initialization')
+    parser.add_argument('--config', metavar='PATH', required=False, default=CONF_PATH,
+                        help='Specify the path where to write the configuration')
+    parser.add_argument('--templates', metavar='PATH', required=False, default=TEMPLATES_PATH,
+                        help='Specify the path where this program looks for templates')
+    parser.add_argument('--mock', action='store_true', default=None,
+                        help='Enable mocking for AWS MetaData')
+    return parser.parse_args(args)
 
 
 def main(args):
-    meta = EnhancedMetadata()
-    config_writer = ConfigWriter()
-    config_writer.write_aws_conf(meta.region)
+    opts = parse_args(args)
 
-    print('log_stream_name = %s' % get_logstream_name(meta))
+    meta = EnhancedMetadata()
+    if opts.mock:
+        meta.mock()
+
     print('Account = %s' % meta.nlmaccount)
+    print('Name tag = %s' % meta.nametag)
+
+    config_writer = ConfigWriter(templates_path=opts.templates, conf_path=opts.config)
+    config_writer.write_aws_conf(meta.region)
+    config_writer.write_awslogs_conf(meta.nlmaccount, meta.nametag)
 
 
 if __name__ == '__main__':
