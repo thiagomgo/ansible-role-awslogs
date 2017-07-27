@@ -1,14 +1,15 @@
 import os
 import imp
 import json
+import sys
 
 import requests_mock
 import pytest
 
 ROLE_BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-RECONFIG_PATH = os.path.join(ROLE_BASE_DIR, 'files', 'awslogs-reconfig')
+sys.path.insert(1, os.path.join(ROLE_BASE_DIR, 'files', 'lib'))
 
-reconfig = imp.load_source('', RECONFIG_PATH)
+import nlminit as reconfig
 
 
 @pytest.fixture
