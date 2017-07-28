@@ -47,7 +47,7 @@
 
 - name: "install NLM specific template for awslogs.conf"
   template:
-    src: awslogs.conf.j2
+    src: nlm/templates/awslogs.conf.j2
     dest: /var/awslogs/nlm/templates/awslogs.conf.j2
     mode: 0644
 

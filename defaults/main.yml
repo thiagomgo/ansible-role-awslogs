@@ -5,5 +5,9 @@ awslogs_logs:
     time_zone: "LOCAL"
     initial_position: "end_of_file"
     group_name: "syslog"
-    stream_name: "{instance_id}"
+    stream_name: "{hostname}-{instance_id}"
 awslogs_region: us-east-1
+
+# These are not really meant to be overridden in playbooks/vars
+awslogs_group_name_prefix: !unsafe "{{ nlmaccount }}-"
+awslogs_stream_name_prefix: !unsafe "{{ nametag }}-"
