@@ -44,27 +44,16 @@ testing.  The python alone can be tested as follows (use a virtualenv):
        inside the container, and although I know people have fixed that, and 
        in fact run ansible via ssh into docker, I haven't got there yet.)
 
-This role can be tested using Docker.  By design, ansible is not required on
-the host, and is installed only on the docker image, so that docker run is used to communicate with the host.
+This role can be tested using Vagrant. A base box named `centos7_test_packer`
+is expected to be present.
 
-* Build the container
+* Bring up guest and run ansible in it
 
-    sudo docker build -t roletest .
-
-* Run ansible within the container 
-
-    sudo docker run -it --name roletest roletest /bin/bash <<EOF
-    ansible-playbook /etc/ansible/roles/tests/test.yml
-    EOF
-
-* We explicitly use bash so we can resume to look around for errors
-
-    sudo docker start -ai roletest
+    cd tests; vagrant up
 
 * Clean-up
 
-    sudo docker rm roletest
-    sudo docker rmi roletest
+    cd tests; vagrant destroy -f
 
 ## Dependencies
 
