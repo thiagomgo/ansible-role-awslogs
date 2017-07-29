@@ -34,6 +34,6 @@
     - occs-awslogs
 
   tasks:
-    - name: execute nlm-specific logs reinitialization
-      command: '/var/awslogs/nlm/awslogs-reconfig.sh --mock'
+    - command: '/var/awslogs/nlm/awslogs-reconfig.sh --mock'
+    - include: asserts.yml
 
