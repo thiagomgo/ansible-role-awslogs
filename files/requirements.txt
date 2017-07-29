@@ -1,0 +1,4 @@
+netaddr==0.7.19
+requests==2.18.2
+boto==2.48.0
+Jinja2==2.9.6

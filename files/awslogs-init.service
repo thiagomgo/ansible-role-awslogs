@@ -1,12 +1,13 @@
 [Unit]
-Description=The CloudWatch Logs agent
+Description=NLM initialization for AWS Logs service
 After=rc-local.service
 After=network-online.target
 Wants=network-online.target
+Before=awslogs.service
 
 [Service]
 Type=oneshot
-ExecStart=/var/awslogs/nlm/awslogs-reconfig
+ExecStart=/var/awslogs/nlm/awslogs-reconfig.sh
 
 [Install]
 WantedBy=multi-user.target

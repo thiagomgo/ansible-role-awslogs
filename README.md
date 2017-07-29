@@ -28,7 +28,32 @@ awslogs_access_key_id: XXX           # AWS key ID, used instead of IAM roles
 awslogs_secret_access_key: XXX       # AWS secret key, used instead of IAM roles
 ```
 
-This configuration is further expanded on in the [Amazon Cloudwatch Logs Documentation](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html#d0e2872).
+## Testing
+
+### Python code
+
+This code includes a Python library and script built in a modular fashion for
+testing.  The python alone can be tested as follows (use a virtualenv):
+
+    pip install -r requirements.txt
+    pytest
+
+### Ansible role
+
+(NOTE: The stuff below is aspirational - systemctl isn't really running well
+       inside the container, and although I know people have fixed that, and 
+       in fact run ansible via ssh into docker, I haven't got there yet.)
+
+This role can be tested using Vagrant. A base box named `centos7_test_packer`
+is expected to be present.
+
+* Bring up guest and run ansible in it
+
+    cd tests; vagrant up
+
+* Clean-up
+
+    cd tests; vagrant destroy -f
 
 ## Dependencies
 
