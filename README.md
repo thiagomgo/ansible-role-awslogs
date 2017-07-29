@@ -30,6 +30,16 @@ awslogs_secret_access_key: XXX       # AWS secret key, used instead of IAM roles
 
 ## Testing
 
+### Python code
+
+This code includes a Python library and script built in a modular fashion for
+testing.  The python alone can be tested as follows (use a virtualenv):
+
+    pip install -r requirements.txt
+    pytest
+
+### Ansible role
+
 (NOTE: The stuff below is aspirational - systemctl isn't really running well
        inside the container, and although I know people have fixed that, and 
        in fact run ansible via ssh into docker, I haven't got there yet.)
