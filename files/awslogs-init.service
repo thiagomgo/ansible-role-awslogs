@@ -1,5 +1,5 @@
 [Unit]
-Description=NLMiInitialization for AWS Logs service
+Description=NLM initialization for AWS Logs service
 After=rc-local.service
 After=network-online.target
 Wants=network-online.target
