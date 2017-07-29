@@ -4,9 +4,9 @@
 
 - hosts: all
   connection: local
+  become: true
 
   vars:
-
     awslogs_region: us-east-1
     awslogs_logs:
      - file: /var/log/messages
@@ -32,3 +32,8 @@
 
   roles:
     - occs-awslogs
+
+  tasks:
+    - name: execute nlm-specific logs reinitialization
+      command: '/var/awslogs/nlm/awslogs-reconfig.sh --mock'
+

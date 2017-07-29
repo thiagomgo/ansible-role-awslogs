@@ -1,0 +1,88 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+# The purpose of this Vargant configuration is to develop/debug the ansible roles used in the packer build
+#
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # This test box was created as follows:
+  #    1. Add the default centos/7 box (vagrant box add centos/7)
+  #
+  #    2. Boot it up with a generic Vagrantfile and ssh in
+  #
+  #    3. Add EPEL repository, ansible, puppet, and vim
+  #
+  #       sudo yum -y install epel-release ansible puppet vim wget
+  #
+  #    4. Update to the latest kernel and install development tools
+  #
+  #       sudo yum -y groupinstall "Development Tools"
+  #       sudo yum -y install kernel-devel dkms
+  #
+  #    5. If the kernel devel and headers version does not match kernel, you need to update and reboot
+  #
+  #       sudo yum -y update kernel
+  #       vagrant reload
+  #
+  #    6. Install vbox additions, substituting the version number of your VirtualBox
+  #
+  #       wget http://download.virtualbox.org/virtualbox/5.1.14/VBoxGuestAdditions_5.1.14.iso
+  #       sudo mkdir /media/VBoxGuestAdditions
+  #       sudo mount -o loop,ro VBoxGuestAdditions_5.1.14.iso /media/VBoxGuestAdditions
+  #       sudo sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run
+  #       sudo umount /media/VBoxGuestAdditions
+  #       sudo rmdir /media/VBoxGuestAdditions
+  #       rm VBoxGuestAdditions_5.1.14.iso
+  #
+  #    7. Build a new box named centos6-epel-vboxfs
+  #
+  #       mkdir ~/vagrant-boxes
+  #       vagrant package --base centos7_test_packer --output ~/vagrant-boxes/centos7-test-packer.box
+  #       vagrant box add --name centos7-test-packer ~/vagrant-boxes/centos7-test-packer.box
+  #
+  # See also:
+  #
+  #    https://wiki.centos.org/HowTos/Virtualization/VirtualBox/CentOSguest
+  #    https://www.vagrantup.com/docs/virtualbox/boxes.html
+  #
+
+  # Create a private network with host-only private IP
+  #config.vm.network "private_network", ip: "192.168.33.17"
+
+  # use the insecure key
+  config.ssh.insert_key = false
+
+  config.vm.provider "virtualbox" do |vb|
+     # Set the name of the box
+     vb.name = "centos7_test_packer"
+
+     # Don't display the VirtualBox GUI when booting the machine
+     vb.gui = false
+
+     # Customize the amount of memory on the VM:
+     vb.memory = "1024"
+  end
+
+  #### UNCOMMENT IN THESE LINES TO BUILD BASE BOX ###
+  #config.vm.box = "centos/7"
+  #config.vm.synced_folder "./", "/vagrant", disabled: true
+
+  #### COMMENT OUT BELOW THIS LINE IF BUILDING BASE BOX ####
+  config.vm.box = "centos7-test-packer"
+
+  # Override the /vagrant mount
+  config.vm.synced_folder "../", "/etc/ansible/roles/occs-awslogs"
+
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.playbook = "test.yml"
+  end
+
+end
