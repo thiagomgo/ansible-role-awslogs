@@ -28,7 +28,33 @@ awslogs_access_key_id: XXX           # AWS key ID, used instead of IAM roles
 awslogs_secret_access_key: XXX       # AWS secret key, used instead of IAM roles
 ```
 
-This configuration is further expanded on in the [Amazon Cloudwatch Logs Documentation](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html#d0e2872).
+## Testing
+
+(NOTE: The stuff below is aspirational - systemctl isn't really running well
+       inside the container, and although I know people have fixed that, and 
+       in fact run ansible via ssh into docker, I haven't got there yet.)
+
+This role can be tested using Docker.  By design, ansible is not required on
+the host, and is installed only on the docker image, so that docker run is used to communicate with the host.
+
+* Build the container
+
+    sudo docker build -t roletest .
+
+* Run ansible within the container 
+
+    sudo docker run -it --name roletest roletest /bin/bash <<EOF
+    ansible-playbook /etc/ansible/roles/tests/test.yml
+    EOF
+
+* We explicitly use bash so we can resume to look around for errors
+
+    sudo docker start -ai roletest
+
+* Clean-up
+
+    sudo docker rm roletest
+    sudo docker rmi roletest
 
 ## Dependencies
 

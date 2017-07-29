@@ -1,7 +1,6 @@
 ### Ansible
 vaults
 ansible.cfg
-hosts
 keys
 *.retry
 
