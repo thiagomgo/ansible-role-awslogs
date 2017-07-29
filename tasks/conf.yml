@@ -9,6 +9,7 @@
   with_items:
     - /var/awslogs/state
     - /var/awslogs/etc
+    - /var/awslogs/nlm
 
 - name: "configure awslogs credentials"
   template:
