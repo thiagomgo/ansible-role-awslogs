@@ -7,7 +7,7 @@ Before=awslogs.service
 
 [Service]
 Type=oneshot
-ExecStart=/var/awslogs/nlm/awslogs-reconfig.sh
+ExecStart=/var/awslogs/nlm/awslogs-reconfig
 
 [Install]
 WantedBy=multi-user.target

@@ -10,7 +10,6 @@
     mode: 0755
   with_items:
     - /var/awslogs/nlm
-    - /var/awslogs/nlm/lib
     - /var/awslogs/nlm/templates
 
 - name: "install NLM requirements file"
@@ -28,15 +27,15 @@
 - name: "install NLM python libraries"
   copy:
     src: "lib/{{ item }}"
-    dest: "/var/awslogs/nlm/lib/{{ item }}"
+    dest: "/var/awslogs/lib/python2.7/site-packages/{{ item }}"
     mode: 0644
   with_items:
     - nlminit.py
 
 - name: "install NLM specific initialization script"
   copy:
-    src: "bin/awslogs-reconfig.sh"
-    dest: /var/awslogs/nlm/awslogs-reconfig.sh
+    src: "bin/awslogs-reconfig"
+    dest: /var/awslogs/nlm/awslogs-reconfig
     mode: 0755
 
 - name: "install NLM specific template for aws.conf"
