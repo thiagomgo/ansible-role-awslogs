@@ -26,28 +26,10 @@ from argparse import ArgumentParser
 import requests
 from jinja2 import Environment, FileSystemLoader
 from boto import ec2
-import netaddr
 
 
 # Update when we move to the next one
 METADATA = 'http://169.254.169.254/2016-09-02/meta-data/{}'
-
-# Map from VPC CIDR block to account name
-VPC_CIDR_TO_ACCOUNT = {
-    '10.154.224.0/24': 'NLM-INT',
-    '10.154.226.0/23': 'NLM-PROD',
-    '10.154.228.0/23': 'NLM-PROD',
-    '10.154.230.0/23': 'NLM-PROD',
-    '10.154.232.0/23': 'NLM-QA',
-    '10.154.234.0/23': 'NLM-QA',
-    '10.154.236.0/23': 'NLM-QA',
-    '10.154.238.0/23': 'NLM-INT',
-    '10.154.240.0/23': 'NLM-INT',
-    '10.154.242.0/23': 'NLM-INT',
-    '10.154.224.0/23': 'NLM-INT',
-    '10.154.246.0/23': 'NLM-INT'
-}
-
 
 # Template for generating /var/awslogs/etc/aws.conf
 TEMPLATES_PATH = '/var/awslogs/nlm/templates'
@@ -116,18 +98,25 @@ class BaseMetadata(object):
             self.__iaminfo = r.json()
         return self.__iaminfo
 
+ACCOUNT_KEY = u'AWS-Account'
+NAME_KEY = u'Name'
+
 
 class EnhancedMetadata(BaseMetadata):
     """
     Adds meta-data derived from boto 2.x requests for the instance, and NLM derived meta-data that is not standard
     """
+
     def __init__(self):
         super(EnhancedMetadata, self).__init__()
         self.__tags = False
 
     def mock(self):
         super(EnhancedMetadata, self).mock()
-        self.__tags = {'Name': 'groot'}
+        self.mock_tags(u'groot', u'NLM-INT')
+
+    def mock_tags(self, name, account):
+        self.__tags = {NAME_KEY: name, ACCOUNT_KEY: account}
 
     @property
     def tags(self):
@@ -149,9 +138,8 @@ class EnhancedMetadata(BaseMetadata):
         """
         name = 'unknown'
         try:
-            if u'Name' in self.tags:
-                _name = self.tags[u'Name']
-                _name = _name.encode('ascii', 'ignore')
+            if NAME_KEY in self.tags:
+                _name = self.tags[NAME_KEY]
                 _name = re.sub(r'[^a-zA-Z0-9]+', r'-', _name).strip('-')
                 _name = re.sub(r'--+', r'-', _name)
                 name = _name
@@ -160,30 +148,22 @@ class EnhancedMetadata(BaseMetadata):
             pass
         return name
 
-    @staticmethod
-    def _nlmaccount(ipstr, dflt=None):
-        """
-        Determines an NLM account name using an IP address
-
-        :param ipstr: a string representing an IP address
-        :param dfltacconut: a value to be returned as the default
-        :return: a string representing the semantic name of the NLM-OCCS account
-        """
-        ip = netaddr.IPAddress(ipstr)
-        for cidrmask, accountname in VPC_CIDR_TO_ACCOUNT.items():
-            cidrnet = netaddr.IPNetwork(cidrmask)
-            if ip in cidrnet:
-                return accountname
-        return dflt
-
     @property
     def nlmaccount(self):
         """
-        Determines the NLM account name using the local IP address
-
-        :return: a string representing the semantic name of the NLM-OCCS account
+        Gets the "AWS-Account" tag value, or returns a default
         """
-        return EnhancedMetadata._nlmaccount(self.private_address, dflt='NLM-INT')
+        account = 'NLM-INT'
+        try:
+            if ACCOUNT_KEY in self.tags:
+                _account = self.tags[ACCOUNT_KEY]
+                _account = re.sub(r'[^a-zA-Z0-9]+', r'-', _account).strip('-')
+                _account = re.sub(r'--+', r'-', _account)
+                account = _account
+        except Exception as e:
+            sys.stderr.write('Exception: %s\n' % e)
+            pass
+        return account
 
 
 class ConfigWriter(object):

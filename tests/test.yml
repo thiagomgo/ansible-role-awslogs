@@ -34,6 +34,6 @@
     - occs-awslogs
 
   tasks:
-    - command: '/var/awslogs/nlm/awslogs-reconfig.sh --mock'
+    - command: '/var/awslogs/nlm/awslogs-reconfig --mock'
     - include: asserts.yml
 

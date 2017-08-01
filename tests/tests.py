@@ -103,36 +103,30 @@ def test_tags_mock(metadata):
     tags = metadata.tags
     assert isinstance(tags, dict)
     assert tags['Name'] == 'groot'
+    assert tags['AWS-Account'] == 'NLM-INT'
 
 
 def test_nlmaccount_int_property(metadata):
     """
     Test that the NLM Account property is working for an NLM-INT subnet
     """
-    urlforip = nlminit.METADATA.format('local-ipv4')
-    with requests_mock.mock() as m:
-        m.get(urlforip, text='10.154.240.17')
-        assert metadata.nlmaccount == 'NLM-INT'
+    metadata.mock_tags('groot', 'NLM-INT')
+    assert metadata.nlmaccount == 'NLM-INT'
 
 
 def test_nlmaccount_qa_property(metadata):
     """
     Test that the NLM Account property is working for an NLM-QA subnet
     """
-    urlforip = nlminit.METADATA.format('local-ipv4')
-    with requests_mock.mock() as m:
-        m.get(urlforip, text='10.154.233.2')
-        assert metadata.nlmaccount == 'NLM-QA'
+    metadata.mock_tags('groot', 'NLM-QA')
+    assert metadata.nlmaccount == 'NLM-QA'
 
 
 def test_nlmaccount_dflt_property(metadata):
     """
     Test the response when the local IP is outside the private range
     """
-    urlforip = nlminit.METADATA.format('local-ipv4')
-    with requests_mock.mock() as m:
-        m.get(urlforip, text='10.100.3.23')
-        assert metadata.nlmaccount == 'NLM-INT'
+    assert metadata.nlmaccount == 'NLM-INT'
 
 
 def test_config_writer_awslogs(writer):

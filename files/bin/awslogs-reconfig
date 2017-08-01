@@ -1,0 +1,6 @@
+#!/var/awslogs/bin/python
+import sys
+import nlminit
+
+# Run the command
+nlminit.main(sys.argv[1:])
