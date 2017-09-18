@@ -15,11 +15,6 @@
     - awslogs
   when: awslogs_status.stat.exists == false
 
-- include: nlm.yml
-  tags:
-    - nlm
-    - awslogs
-
 - include: cleanup.yml
   tags:
     - cleanup

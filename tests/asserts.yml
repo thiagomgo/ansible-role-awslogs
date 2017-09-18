@@ -22,17 +22,3 @@
 - name: region is correct in aws.conf
   assert:
     that: _conf.stdout == 'region = us-east-1'
-
-- command: grep NLM-INT-var-log-messages /var/awslogs/etc/awslogs.conf
-  register: _logsconf
-
-- name: nlmaccount appears correctly in awslogs.conf
-  assert:
-    that: _logsconf.stdout == 'log_group_name = NLM-INT-var-log-messages'
-
-- shell: grep groot /var/awslogs/etc/awslogs.conf | wc -l
-  register: _logsconf
-  
-- name: nametag appears correctly in awslogs.conf
-  assert:
-    that: _logsconf.stdout == '3'

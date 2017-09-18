@@ -1,6 +1,0 @@
-## Base requirements must be installed on remote
--r files/requirements.txt
-
-## These are only for testing
-pytest
-requests_mock
