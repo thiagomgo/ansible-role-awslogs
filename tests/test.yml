@@ -4,20 +4,35 @@
 
 - hosts: all
   connection: local
+  become: true
 
   vars:
-
+    awslogs_region: us-east-1
     awslogs_logs:
-      - file: /var/log/syslog
-        format: "%b %d %H:%M:%S"
-        time_zone: "LOCAL"
-        initial_position: "end_of_file"
-        group_name: syslog
+     - file: /var/log/messages
+       format: "%b %d %H:%M:%S"
+       time_zone: "LOCAL"
+       initial_position: "start_of_file"
+       group_name: 'var-log-messages'
+       stream_name: '{hostname}-{instance-id}'
 
-      - file: /var/log/boot.log
-        time_zone: "UTC"
-        initial_position: "start_of_file"
-        group_name: boot
+     - file: /var/log/secure
+       format: "%b %d %H:%M:%S"
+       time_zone: "LOCAL"
+       initial_position: "start_of_file"
+       group_name: 'var-log-secure'
+       stream_name: '{hostname}-{instance-id}'
+
+     - file: /var/log/audit/audit.log
+       format: "%b %d %H:%M:%S"
+       time_zone: "LOCAL"
+       initial_position: "start_of_file"
+       group_name: 'var-log-audit'
+       stream_name: '{hostname}-{instance-id}'
 
   roles:
-    - ansible-role-awslogs
+    - occs-awslogs
+
+  tasks:
+    - include: asserts.yml
+

@@ -1,47 +1,44 @@
+# These steps are only done if the service does not exist
 ---
 
-- name: "awslogs | update apt cache"
+- name: "update apt cache"
   apt:
     update_cache: yes
     cache_valid_time: 86400
   when: ansible_os_family == 'Debian'
 
-- name: "awslogs | check if the service exists"
-  stat: path=/etc/init.d/awslogs
-  register: service_status
-
-- name: "awslogs | download the installation script"
+- name: "download the installation script"
   get_url:
     dest: /tmp/awslogs-agent-setup.py
     group: root
     owner: root
     mode: 0600
     url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
-  when: service_status.stat.exists == false
-  
-- name: "awslogs | create systemd unit file"
-  copy:
-    src=awslogs.service
-    dest=/lib/systemd/system/awslogs.service
-    owner=root
-    group=root
-    mode=644
-    backup=yes
-  when: service_status.stat.exists == false and ansible_service_mgr is defined and ansible_service_mgr == "systemd"
 
-- name: "awslogs | upload temporary awslogs.conf"
+- name: "upload temporary awslogs.conf"
   template:
     src: awslogs.conf.j2
     dest: /tmp/awslogs.conf
     owner: root
     group: root
     mode: 0644
-  when: service_status.stat.exists == false
 
-- name: "awslogs | discover EC2 facts"
-  action: ec2_facts
-
-- name: "awslogs | install the daemon"
-  shell: "python /tmp/awslogs-agent-setup.py -n -r {{ awslogs_region | default(ansible_ec2_placement_region) }} -c /tmp/awslogs.conf"
+- name: "install the daemon"
+  shell: "python /tmp/awslogs-agent-setup.py -n -r {{ awslogs_region }} -c /tmp/awslogs.conf"
   args:
     creates: "/etc/init.d/awslogs"
+
+- name: "create systemd unit file"
+  copy:
+    src: awslogs.service
+    dest: /etc/systemd/system/awslogs.service
+    owner: root
+    group: root
+    mode: 644
+    backup: yes
+  when: ansible_service_mgr is defined and ansible_service_mgr == "systemd"
+
+- name: "enable the awslogs service"
+  service:
+    name: awslogs.service
+    enabled: yes

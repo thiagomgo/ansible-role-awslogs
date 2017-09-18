@@ -5,17 +5,15 @@
     - configure
     - awslogs
 
+- name: "check if awslogs exists"
+  stat: path=/var/awslogs/bin/aws
+  register: awslogs_status
+
 - include: install.yml
   tags:
     - install
     - awslogs
-
-- include: start.yml
-  tags:
-    - start
-    - restart
-    - service
-    - awslogs
+  when: awslogs_status.stat.exists == false
 
 - include: cleanup.yml
   tags:

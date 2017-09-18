@@ -1,16 +1,14 @@
 # **Ansible Role: AWSLogs**
 
-[![Build Status](https://travis-ci.org/thiagomgo/ansible-role-awslogs.svg?branch=master)](https://travis-ci.org/thiagomgo/ansible-role-awslogs) [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-awslogs-blue.svg)](https://galaxy.ansible.com/thiagomgo/awslogs/)
-
 This role install and configure the AWS CloudWatch Logs.
 
 ## Requirements
 
-This role only requires Ansible version 1.9+ and EC2_FACTS module.
+This role only requires Ansible version 1.9+
 
 ## Role Variables
 
-This role only uses one variable, `awslogs_logs`, which is a dictionary comprised of the following items:
+This role only uses two variables, `awslogs_region` and `awslogs_logs`, which is a dictionary comprised of the following items:
 
 ```yaml
 
@@ -23,15 +21,39 @@ awslogs_logs:
     stream_name: "{instance_id}"     # You can use a literal string and/or predefined variables ({instance_id}, {hostname}, {ip_address})
 ```
 
-In addition, there are three variables that are not used by default:
+In addition, there are two variables that are not used by default:
 
 ```yaml
-awslogs_region: eu-west-1            # Overrides the local region for log shipping
 awslogs_access_key_id: XXX           # AWS key ID, used instead of IAM roles
 awslogs_secret_access_key: XXX       # AWS secret key, used instead of IAM roles
 ```
 
-This configuration is further expanded on in the [Amazon Cloudwatch Logs Documentation](http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AgentReference.html#d0e2872).
+## Testing
+
+### Python code
+
+This code includes a Python library and script built in a modular fashion for
+testing.  The python alone can be tested as follows (use a virtualenv):
+
+    pip install -r requirements.txt
+    pytest
+
+### Ansible role
+
+(NOTE: The stuff below is aspirational - systemctl isn't really running well
+       inside the container, and although I know people have fixed that, and 
+       in fact run ansible via ssh into docker, I haven't got there yet.)
+
+This role can be tested using Vagrant. A base box named `centos7_test_packer`
+is expected to be present.
+
+* Bring up guest and run ansible in it
+
+    cd tests; vagrant up
+
+* Clean-up
+
+    cd tests; vagrant destroy -f
 
 ## Dependencies
 
@@ -45,6 +67,7 @@ None
 - hosts: all
 
   vars:
+    awslogs_region: us-east-1
     awslogs_logs:
       - file: /var/log/syslog
         format: "%b %d %H:%M:%S"
@@ -67,6 +90,9 @@ None
 MIT / BSD
 
 ## Author Information
+
+U.S. National Library of Medicine (NLM)
+Based on work by:
 
 Thiago Gomes
 - thiago.mgomes [at] gmail.com

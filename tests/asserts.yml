@@ -1,0 +1,24 @@
+# Check that the system is properly provisioned
+---
+- stat:
+    path: /var/awslogs/etc/aws.conf
+  register: _conf
+
+- stat:
+    path: /var/awslogs/etc/awslogs.conf
+  register: _logsconf
+
+- name: aws.conf exists
+  assert:
+    that: _conf.stat.exists == true
+
+- name: awslogs.conf exists
+  assert:
+    that: _logsconf.stat.exists == true
+
+- command: grep region /var/awslogs/etc/aws.conf
+  register: _conf
+
+- name: region is correct in aws.conf
+  assert:
+    that: _conf.stdout == 'region = us-east-1'

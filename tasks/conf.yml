@@ -1,6 +1,7 @@
+# These steps are done independently whether the service exists or not
 ---
 
-- name: "awslogs | create directories"
+- name: "create directories"
   file:
     path: "{{ item }}"
     state: directory
@@ -9,18 +10,16 @@
     - /var/awslogs/state
     - /var/awslogs/etc
 
-- name: "awslogs | configure awslogs agent"
+- name: "configure awslogs credentials"
+  template:
+    src: aws.conf.j2
+    dest: /var/awslogs/etc/aws.conf
+
+- name: "configure awslogs agent"
   template:
     src: awslogs.conf.j2
     dest: /var/awslogs/etc/awslogs.conf
     owner: root
     group: root
     mode: 0644
-  notify: restart awslogs
-
-- name: "awslogs | configure awslogs credentials"
-  template:
-    src: aws.conf.j2
-    dest: /var/awslogs/etc/aws.conf
-  when: awslogs_secret_access_key is defined
   notify: restart awslogs

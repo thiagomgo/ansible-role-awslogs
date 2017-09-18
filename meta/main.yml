@@ -1,7 +1,9 @@
 galaxy_info:
-  author: Thiago Gomes (thiagomgo)
-  description: An ansible role to install and configure the AWS CloudWatch Logs
-  company:
+  author:
+    - U.S. National Library of Medicine (NLM-OCCS)
+    - Thiago Gomes (thiagomgo)
+  description: An ansible role to install and configure the AWS CloudWatch Logs offline
+  company: U.S. National Library of Medicine (NLM)
   license: "license (BSD, MIT)"
   min_ansible_version: 1.9
   platforms:

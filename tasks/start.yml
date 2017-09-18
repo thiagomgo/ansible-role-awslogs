@@ -1,7 +1,0 @@
----
-
-- name: "awslogs | Start the service"
-  service:
-    enabled: yes
-    name: awslogs
-    state: started

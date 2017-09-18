@@ -1,6 +1,6 @@
 ---
 
-- name: "awslogs | remove installation files"
+- name: "remove installation files"
   file:
     path: "{{ item }}"
     state: absent
