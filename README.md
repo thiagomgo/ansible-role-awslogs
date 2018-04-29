@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/thiagomgo/ansible-role-awslogs.svg?branch=master)](https://travis-ci.org/thiagomgo/ansible-role-awslogs) [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-awslogs-blue.svg)](https://galaxy.ansible.com/thiagomgo/awslogs/)
 
-This role install and configure the AWS CloudWatch Logs.
+This role installs and configures the AWS CloudWatch Logs Agent.
 
 ## Requirements
 
