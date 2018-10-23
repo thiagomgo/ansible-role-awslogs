@@ -39,7 +39,7 @@
   when: service_status.stat.exists == false
 
 - name: "awslogs | discover EC2 facts"
-  action: ec2_facts
+  action: ec2_metadata_facts
 
 - name: "awslogs | install the daemon"
   shell: "python /tmp/awslogs-agent-setup.py -n -r {{ awslogs_region | default(ansible_ec2_placement_region) }} -c /tmp/awslogs.conf"
