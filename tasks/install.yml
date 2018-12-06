@@ -29,6 +29,10 @@
     backup=yes
   when: service_status.stat.exists == false and ansible_service_mgr is defined and ansible_service_mgr == "systemd"
 
+- name: "awslogs | enable systemd unit"
+  systemd: enabled=yes name=awslogs.service
+  when: service_status.stat.exists == false and ansible_service_mgr is defined and ansible_service_mgr == "systemd"
+
 - name: "awslogs | upload temporary awslogs.conf"
   template:
     src: awslogs.conf.j2
