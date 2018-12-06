@@ -6,3 +6,8 @@ awslogs_logs:
     initial_position: "end_of_file"
     group_name: "syslog"
     stream_name: "{instance_id}"
+
+## Proxy related configuration variables
+# awslogs_http_proxy: http://user:pass@proxy.host:80/
+# awslogs_https_proxy: '{{ awslogs_http_proxy}}'
+# awslogs_noproxy: 127.0.0.1
