@@ -58,3 +58,4 @@
     group: root
     mode: 0644
   notify: restart awslogs
+  when: (awslogs_http_proxy is defined) or (awslogs_https_proxy is defined) or (awslogs_noproxy is defined)
