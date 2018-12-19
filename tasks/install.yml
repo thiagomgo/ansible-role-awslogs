@@ -44,6 +44,7 @@
 
 - name: "awslogs | discover EC2 facts"
   action: ec2_metadata_facts
+  when: awslogs_region is not defined
 
 - name: "awslogs | install the daemon"
   shell: "python /tmp/awslogs-agent-setup.py -n -r {{ awslogs_region | default(ansible_ec2_placement_region) }} -c /tmp/awslogs.conf"
