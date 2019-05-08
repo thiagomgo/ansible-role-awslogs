@@ -128,7 +128,14 @@ datetime_format = {{ log.format }}
 initial_position = {{ log.initial_position }}
 {% endif %}
 file = {{ log.file }}
+{% if log.buffer_duration is defined %}
+buffer_duration = {{ log.buffer_duration }}
+{% else %}
 buffer_duration = 5000
+{% endif %}
+{% if log.file_fingerprint_lines is defined %}
+file_fingerprint_lines = {{ log.file_fingerprint_lines }}
+{% endif %}
 log_group_name = {{ log.group_name }}
 log_stream_name = {{ log.stream_name }}
 {% if log.multi_line_start_pattern is defined %}
