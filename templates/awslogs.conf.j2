@@ -141,5 +141,11 @@ log_stream_name = {{ log.stream_name }}
 {% if log.multi_line_start_pattern is defined %}
 multi_line_start_pattern = {{ log.multi_line_start_pattern }}
 {% endif %}
+{% if log.batch_count is defined %}
+batch_count = {{ log.batch_count }}
+{% endif %}
+{% if log.batch_size is defined %}
+batch_size = {{ log.batch_size }}
+{% endif %}
 
 {% endfor %}
